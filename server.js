@@ -24,19 +24,35 @@ const PORT = process.env.PORT || 3000;
 // MIDDLEWARE GLOBAL
 // =============================================
 
-// Configuración CORS con orígenes permitidos desde .env
-const allowedOrigins = (process.env.CORS_ORIGINS || 'http://localhost:3000').split(',');
+// Configuración CORS basada en el entorno y el URL público de Render
+const isProduction = process.env.NODE_ENV === 'production';
+const localOrigin = 'http://localhost:3000';
+const renderOrigin = process.env.RENDER_EXTERNAL_URL
+  ? new URL(process.env.RENDER_EXTERNAL_URL).origin
+  : 'https://zapatillas-rasta.onrender.com';
+
+const envOrigins = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(',').map((origin) => origin.trim()).filter(Boolean)
+  : [];
+
+const allowedOrigins = Array.from(new Set([
+  ...envOrigins,
+  renderOrigin,
+  ...(isProduction ? [] : [localOrigin])
+]));
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Permitir peticiones sin origin (Postman, etc.)
+    // Permitir peticiones sin origin (herramientas de prueba, servidores backend, etc.)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Origen no permitido por CORS'));
     }
   },
-  methods: ['GET', 'POST']
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type'],
+  optionsSuccessStatus: 200
 }));
 
 app.use(express.json());

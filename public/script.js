@@ -194,8 +194,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             btnEnviar.disabled = true;
 
             try {
-                // Enviar datos al backend (ruta relativa)
-                const response = await fetch('/api/cotizacion', {
+                // Enviar datos al backend desde local o desde el mismo dominio de Render
+                const apiOrigin = window.location.hostname === 'localhost'
+                    ? 'http://localhost:3000'
+                    : window.location.origin;
+
+                const response = await fetch(`${apiOrigin}/api/cotizacion`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
