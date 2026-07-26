@@ -15,7 +15,8 @@
 const { Pool } = require('pg');
 
 const poolConfig = {
-  connectionString: process.env.DATABASE_URL
+  connectionString: process.env.DATABASE_URL ||
+    `postgresql://${process.env.PGUSER || 'postgres'}:${process.env.PGPASSWORD || ''}@${process.env.PGHOST || '127.0.0.1'}:${process.env.PGPORT || 5434}/${process.env.PGDATABASE || 'zapatillas_rasta'}`
 };
 
 const useSsl = process.env.NODE_ENV === 'production' || process.env.DB_SSL === 'true';
