@@ -155,11 +155,10 @@ async function startServer() {
 
   if (!dbConnected) {
     console.error('⚠️  No se pudo conectar a la base de datos. El servidor iniciará pero las funciones de DB fallarán.');
-    console.error('   Verifica que PostgreSQL esté corriendo y las credenciales sean correctas.');
-    console.error('   Host:', process.env.PGHOST || '127.0.0.1');
-    console.error('   Port:', process.env.PGPORT || '5432');
-    console.error('   Database:', process.env.PGDATABASE || 'zapatillas_rasta');
-    console.error('   User:', process.env.PGUSER || 'postgres');
+    console.error('   📌 Verifica que DATABASE_URL esté definida en las variables de entorno de Render.');
+    console.error('   📌 Si estás en Render, la URL se inyecta automáticamente al vincular PostgreSQL.');
+    console.error('   📌 Si estás en local, crea un archivo .env con DATABASE_URL.');
+    console.error('   📌 URL actual:', process.env.DATABASE_URL ? '✅ Definida' : '❌ NO DEFINIDA');
   }
 
   app.listen(PORT, () => {
