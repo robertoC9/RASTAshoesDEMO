@@ -92,20 +92,23 @@ app.get('/api/health', (req, res) => {
 // MIDDLEWARE DE ERRORES GLOBAL
 // =============================================
 app.use((err, req, res, next) => {
-  console.error('❌ Error no controlado:', err.message);
+  console.error('❌ Error no controlado:', err);
 
   // Errores de CORS
-  if (err.message === 'Origen no permitido por CORS') {
+  if (err && err.message === 'Origen no permitido por CORS') {
     return res.status(403).json({
       success: false,
       error: 'Acceso denegado por política CORS.'
     });
   }
 
-  // Error genérico
+  const errorMessage = process.env.NODE_ENV === 'development'
+    ? (err && err.message ? err.message : 'Error interno del servidor. Intenta nuevamente.')
+    : 'Error interno del servidor. Intenta nuevamente.';
+
   res.status(500).json({
     success: false,
-    error: 'Error interno del servidor. Intenta nuevamente.'
+    error: errorMessage
   });
 });
 

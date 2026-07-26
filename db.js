@@ -14,12 +14,19 @@
 
 const { Pool } = require('pg');
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL
-    ? { rejectUnauthorized: false }  // SSL requerido por Render
-    : false                          // Sin SSL en desarrollo local
-});
+const poolConfig = {
+  connectionString: process.env.DATABASE_URL
+};
+
+const useSsl = process.env.NODE_ENV === 'production' || process.env.DB_SSL === 'true';
+
+if (useSsl) {
+  poolConfig.ssl = {
+    rejectUnauthorized: false
+  };
+}
+
+const pool = new Pool(poolConfig);
 
 /**
  * Ejecuta una consulta SQL

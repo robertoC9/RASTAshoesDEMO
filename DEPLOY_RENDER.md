@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS cotizaciones_rasta (
     nombre VARCHAR(120),
     correo VARCHAR(120),
     modelo VARCHAR(80),
-    mensaje_text VARCHAR(120),
+    mensaje TEXT,
     fecha TIMESTAMP DEFAULT NOW()
 );
 

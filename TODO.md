@@ -7,7 +7,7 @@
 - [x] Actualizar db.js - Conexión PostgreSQL con DATABASE_URL y SSL
 - [x] Actualizar server.js - Servir desde /public y optimizar
 - [x] Actualizar init_db.sql con estructura de columnas correcta
-- [x] Actualizar cotizacionController.js con columna mensaje_text
+- [x] Actualizar cotizacionController.js con columna mensaje
 - [x] Crear .env.example con variables documentadas
 - [x] Verificar package.json con scripts correctos
 
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS cotizaciones_rasta (
     nombre VARCHAR(120),
     correo VARCHAR(120),
     modelo VARCHAR(80),
-    mensaje_text VARCHAR(120),
+    mensaje TEXT,
     fecha TIMESTAMP DEFAULT NOW()
 );
 
