@@ -60,7 +60,7 @@ const crearCotizacion = async (req, res, next) => {
   } catch (error) {
     console.error('❌ Error al guardar cotización:', error);
 
-    const errorMessage = process.env.NODE_ENV === 'development'
+    const errorMessage = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
       ? error.message
       : 'Error interno del servidor. Intenta nuevamente.';
 
@@ -88,7 +88,15 @@ const listarCotizaciones = async (req, res, next) => {
 
   } catch (error) {
     console.error('❌ Error al obtener cotizaciones:', error.message);
-    next(error);
+    
+    const errorMessage = !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
+      ? error.message
+      : 'Error interno del servidor. Intenta nuevamente.';
+
+    return res.status(500).json({
+      success: false,
+      error: errorMessage
+    });
   }
 };
 

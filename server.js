@@ -16,6 +16,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const cotizacionRoutes = require('./routes/cotizacionRoutes');
+const { testConnection, pool } = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -78,13 +79,25 @@ app.get('/', (req, res) => {
 });
 
 // =============================================
-// ENDPOINT DE SALUD
+// ENDPOINT DE SALUD (mejorado con estado DB)
 // =============================================
-app.get('/api/health', (req, res) => {
+app.get('/api/health', async (req, res) => {
+  let dbStatus = 'disconnected';
+  try {
+    const client = await pool.connect();
+    await client.query('SELECT 1');
+    client.release();
+    dbStatus = 'connected';
+  } catch (err) {
+    dbStatus = 'error';
+  }
+
   res.json({
     status: 'ok',
     timestamp: new Date().toISOString(),
-    uptime: process.uptime()
+    uptime: process.uptime(),
+    database: dbStatus,
+    environment: process.env.NODE_ENV || 'development'
   });
 });
 
@@ -102,7 +115,9 @@ app.use((err, req, res, next) => {
     });
   }
 
-  const errorMessage = process.env.NODE_ENV === 'development'
+  // En desarrollo mostrar el error real, en producción ocultar
+  const isDev = process.env.NODE_ENV === 'development' || !process.env.NODE_ENV;
+  const errorMessage = isDev
     ? (err && err.message ? err.message : 'Error interno del servidor. Intenta nuevamente.')
     : 'Error interno del servidor. Intenta nuevamente.';
 
@@ -113,23 +128,60 @@ app.use((err, req, res, next) => {
 });
 
 // =============================================
+// GRACEFUL SHUTDOWN
+// =============================================
+const gracefulShutdown = async (signal) => {
+  console.log(`\n📥 Señal ${signal} recibida. Cerrando servidor gracefulmente...`);
+  try {
+    await pool.end();
+    console.log('🔌 Pool de PostgreSQL cerrado correctamente.');
+    process.exit(0);
+  } catch (err) {
+    console.error('❌ Error al cerrar el pool:', err.message);
+    process.exit(1);
+  }
+};
+
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+
+// =============================================
 // INICIAR SERVIDOR
 // =============================================
-app.listen(PORT, () => {
-  const portStr = String(PORT);
-  const padding = ' '.repeat(Math.max(0, 32 - portStr.length));
-  const urlStr = `http://localhost:${PORT}`;
-  const urlPadding = ' '.repeat(Math.max(0, 30 - urlStr.length));
-  const modeStr = process.env.NODE_ENV || 'development';
-  const modePadding = ' '.repeat(Math.max(0, 30 - modeStr.length));
+async function startServer() {
+  // Probar conexión a la base de datos antes de iniciar
+  console.log('🔄 Verificando conexión a PostgreSQL...');
+  const dbConnected = await testConnection();
 
-  console.log(`
+  if (!dbConnected) {
+    console.error('⚠️  No se pudo conectar a la base de datos. El servidor iniciará pero las funciones de DB fallarán.');
+    console.error('   Verifica que PostgreSQL esté corriendo y las credenciales sean correctas.');
+    console.error('   Host:', process.env.PGHOST || '127.0.0.1');
+    console.error('   Port:', process.env.PGPORT || '5432');
+    console.error('   Database:', process.env.PGDATABASE || 'zapatillas_rasta');
+    console.error('   User:', process.env.PGUSER || 'postgres');
+  }
+
+  app.listen(PORT, () => {
+    const portStr = String(PORT);
+    const padding = ' '.repeat(Math.max(0, 32 - portStr.length));
+    const urlStr = `http://localhost:${PORT}`;
+    const urlPadding = ' '.repeat(Math.max(0, 30 - urlStr.length));
+    const modeStr = process.env.NODE_ENV || 'development';
+    const modePadding = ' '.repeat(Math.max(0, 30 - modeStr.length));
+    const dbIcon = dbConnected ? '✅' : '⚠️';
+
+    console.log(`
 ╔═══════════════════════════════════════════╗
 ║    🦁 ZAPATILLAS RASTA - API Server      ║
 ║    Puerto: ${PORT}${padding}║
 ║    ${urlStr}${urlPadding}║
 ║    Modo: ${modeStr}${modePadding}║
+║    DB: ${dbIcon}${dbConnected ? ' Conectada' : ' Desconectada'}               ║
 ╚═══════════════════════════════════════════╝
-  `);
-});
+    `);
+  });
+}
+
+startServer();
 
