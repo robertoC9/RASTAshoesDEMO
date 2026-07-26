@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colección Exclusiva RASTA</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="style-coleccion.css">
+</head>
+<body>
+    <!-- Capa de fondo scrolleable con la imagen de la zapatilla -->
+    <div class="imagen-scroll-wrapper">
+        <img class="imagen-fondo" id="vista-zapatilla" src="background_COLECCION.png" alt="Zapatilla RASTA">
+    </div>
+
+    <div class="ui-coleccion">
+        <header>
+            <a href="index.html" class="btn-volver" id="btn-volver">← Volver al Inicio</a>
+            <div class="logo-rasta">RASTA</div>
+        </header>
+
+        <main class="selector-modelo">
+            <h3 class="subtitulo">Modelo Actual</h3>
+            <h1 id="nombre-modelo">Kingston Original</h1>
+            
+            <div class="opciones-color">
+                <button class="color-btn activo" data-color="0" data-name="Kingston Original" style="background: #e21c1c;"></button>
+                <button class="color-btn" data-color="75" data-name="Montego Vibes" style="background: #9bd62e;"></button>
+                <button class="color-btn" data-color="160" data-name="Ocho Rios Wave" style="background: #1c52e2;"></button>
+                <button class="color-btn" data-color="280" data-name="Negril Sunset" style="background: #c31ce2;"></button>
+                <button class="color-btn" data-color="45" data-name="Zion Gold" style="background: #e2a61c;"></button>
+            </div>
+        </main>
+    </div>
+
+    <script src="script-coleccion.js"></script>
+</body>
+</html>

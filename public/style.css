@@ -1,0 +1,850 @@
+/* =============================================
+   VARIABLES GLOBALES - Paleta RASTA
+   ============================================= */
+:root {
+    --rasta-red: #D92525;
+    --rasta-yellow: #F2C12E;
+    --rasta-green: #009B3A;
+    --dark-bg: #1c1c1c;
+    --white: #ffffff;
+    --overlay-dark: rgba(0, 0, 0, 0.55);
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.3);
+    --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.5);
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =============================================
+   RESET & BASE
+   ============================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    font-family: 'Bauhaus 93', 'Impact', sans-serif;
+}
+
+/* =============================================
+   KEYFRAMES - Animaciones reutilizables
+   ============================================= */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLogo {
+    from {
+        opacity: 0;
+        transform: rotate(-15deg) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: rotate(-15deg) translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.85) translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow: 0 0 15px rgba(217, 37, 37, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 30px rgba(217, 37, 37, 0.8), 0 0 60px rgba(217, 37, 37, 0.3);
+    }
+}
+
+/* Clases utilitarias para animaciones JS-free */
+.animate-fade-in-up {
+    animation: fadeInUp 1s ease-out forwards;
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+}
+
+.animate-scale-in {
+    animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* =============================================
+   HERO - Sección principal
+   ============================================= */
+.hero {
+    background-image: linear-gradient(
+        135deg,
+        rgba(0, 43, 91, 0.6) 0%,
+        rgba(0, 0, 0, 0.7) 100%
+    ), url('background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Capa glassmorphism sutil sobre el hero */
+.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--glass-bg);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+/* =============================================
+   TÍTULO PRINCIPAL
+   ============================================= */
+h1 {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+    animation: fadeInUp 1s ease-out 0.3s forwards;
+}
+
+.linea1 {
+    font-size: 3.5rem;
+    color: var(--rasta-yellow);
+    letter-spacing: 2px;
+    text-shadow:
+        2px 2px 4px rgba(0, 0, 0, 0.6),
+        0 0 30px rgba(242, 193, 46, 0.2);
+}
+
+.linea2 {
+    font-size: 6.5rem;
+    color: var(--white);
+    text-transform: uppercase;
+    text-shadow:
+        4px 4px 0px var(--rasta-red),
+        8px 8px 0px var(--dark-bg);
+}
+
+.marca {
+    color: var(--white);
+}
+
+/* =============================================
+   BOTONES - Grupo de acciones
+   ============================================= */
+.btn-group {
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeInUp 0.8s ease-out 0.7s forwards;
+}
+
+/* Clase base compartida para ambos botones (DRY) */
+.btn-comprar,
+.btn-cotizar {
+    display: inline-block;
+    background: transparent;
+    color: var(--white);
+    text-decoration: none;
+    font-size: 1.5rem;
+    padding: 18px 45px;
+    border-radius: 50px;
+    text-transform: uppercase;
+    font-family: 'Arial', sans-serif;
+    font-weight: 900;
+    letter-spacing: 2px;
+    border: 2px solid var(--white);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-comprar::before,
+.btn-cotizar::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--rasta-red), var(--rasta-yellow));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.btn-comprar:hover,
+.btn-cotizar:hover {
+    border-color: transparent;
+    color: var(--white);
+    transform: perspective(500px) rotateX(2deg) translateY(-3px);
+    box-shadow: var(--shadow-soft);
+}
+
+.btn-comprar:hover::before,
+.btn-cotizar:hover::before {
+    opacity: 1;
+}
+
+.btn-comprar:active,
+.btn-cotizar:active {
+    transform: perspective(500px) rotateX(-2deg) translateY(2px) scale(0.97);
+}
+
+/* =============================================
+   TARJETA MODAL - Cotización
+   ============================================= */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-card {
+    background: linear-gradient(
+        145deg,
+        rgba(30, 30, 30, 0.95) 0%,
+        rgba(20, 20, 20, 0.9) 100%
+    );
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    padding: 2.5rem;
+    width: 90%;
+    max-width: 480px;
+    position: relative;
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: scale(0.85) translateY(40px);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                opacity 0.4s ease;
+    opacity: 0;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-overlay.active .modal-card {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+/* Botón cerrar */
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 2.2rem;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    line-height: 1;
+    padding: 0.2rem 0.5rem;
+    border-radius: 8px;
+}
+
+.modal-close:hover {
+    color: var(--white);
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(90deg);
+}
+
+/* Títulos del modal */
+.modal-title {
+    font-family: 'Bauhaus 93', 'Impact', sans-serif;
+    font-size: 2.2rem;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.modal-subtitle {
+    font-family: 'Arial', sans-serif;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 2rem;
+    line-height: 1.4;
+}
+
+/* Formulario */
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.form-group label {
+    font-family: 'Arial', sans-serif;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    font-family: 'Arial', sans-serif;
+    font-size: 1rem;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--white);
+    outline: none;
+    transition: var(--transition-smooth);
+    width: 100%;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--rasta-red);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 3px rgba(217, 37, 37, 0.2);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.form-group select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='white' opacity='0.5' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+}
+
+.form-group select option {
+    background: var(--dark-bg);
+    color: var(--white);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* Botón enviar */
+.btn-enviar {
+    background: linear-gradient(135deg, var(--rasta-red), #b01e1e);
+    color: var(--white);
+    font-family: 'Arial', sans-serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 16px 32px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    box-shadow: 0 10px 25px rgba(217, 37, 37, 0.4);
+    margin-top: 0.5rem;
+}
+
+.btn-enviar:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(217, 37, 37, 0.5);
+    background: linear-gradient(135deg, var(--rasta-yellow), var(--rasta-red));
+    color: var(--white);
+}
+
+.btn-enviar:active {
+    transform: translateY(0) scale(0.97);
+}
+
+/* Scroll personalizado del modal */
+.modal-card::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-card::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.modal-card::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.modal-card::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* =============================================
+   FOOTER ESTILO RASTA
+   ============================================= */
+.footer-rasta {
+    width: 100%;
+    background: var(--overlay-dark);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    text-align: center;
+    padding-bottom: 20px;
+    position: relative;
+    z-index: 10;
+    overflow: hidden;
+}
+
+/* Imagen de fondo expandida al ancho y alto completo del footer */
+.footer-bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('imagen.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.25;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Franja tricolor Rasta (verde, amarillo, rojo) */
+.rasta-stripe {
+    display: flex;
+    width: 100%;
+    height: 8px;
+    position: relative;
+    z-index: 1;
+}
+
+.stripe-green {
+    flex: 1;
+    background-color: var(--rasta-green);
+}
+
+.stripe-yellow {
+    flex: 1;
+    background-color: var(--rasta-yellow);
+}
+
+.stripe-red {
+    flex: 1;
+    background-color: var(--rasta-red);
+}
+
+.footer-content {
+    padding: 25px 20px 10px;
+    position: relative;
+    z-index: 1;
+}
+
+.footer-content p {
+    font-family: 'Bauhaus 93', 'Impact', sans-serif;
+    font-size: 1.6rem;
+    color: var(--white);
+    letter-spacing: 3px;
+    text-shadow:
+        2px 2px 0px var(--rasta-green),
+        4px 4px 0px var(--rasta-yellow),
+        6px 6px 0px var(--rasta-red);
+    text-transform: uppercase;
+    margin: 0;
+}
+
+/* =============================================
+   TOAST DE NOTIFICACIÓN
+   ============================================= */
+.toast-notification {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 28px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #009B3A, #007a2e);
+    color: var(--white);
+    font-family: 'Arial', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    transform: translateX(120%);
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                opacity 0.4s ease;
+    max-width: 450px;
+    pointer-events: none;
+}
+
+.toast-notification.toast-visible {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: all;
+}
+
+.toast-notification.toast-error {
+    background: linear-gradient(135deg, #D92525, #a01e1e);
+}
+
+.toast-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+}
+
+.toast-message {
+    flex: 1;
+    line-height: 1.4;
+}
+
+/* =============================================
+   LOGO FOOTER
+   ============================================= */
+.logo-footer {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    width: 275px;
+    height: auto;
+    filter: drop-shadow(4px 4px 8px rgba(0, 0, 0, 0.6));
+    pointer-events: none;
+    image-rendering: auto;
+    -ms-interpolation-mode: bicubic;
+    z-index: 2;
+    transform: rotate(-15deg);
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out 1.2s forwards;
+}
+
+/* =============================================
+   RESPONSIVE - TABLETS (max-width: 1024px)
+   ============================================= */
+@media (max-width: 1024px) {
+    .linea1 {
+        font-size: 2.8rem;
+    }
+
+    .linea2 {
+        font-size: 4.5rem;
+    }
+
+    .btn-comprar,
+    .btn-cotizar {
+        font-size: 1.2rem;
+        padding: 14px 30px;
+    }
+
+    .logo-footer {
+        width: 200px;
+        bottom: 25px;
+        right: 25px;
+    }
+
+    .modal-card {
+        padding: 2rem;
+    }
+
+    .modal-title {
+        font-size: 1.8rem;
+    }
+}
+
+/* =============================================
+   RESPONSIVE - MÓVILES GRANDES (max-width: 768px)
+   ============================================= */
+@media (max-width: 768px) {
+    .hero-content {
+        gap: 1.5rem;
+        padding: 0 1.5rem;
+    }
+
+    .linea1 {
+        font-size: 2rem;
+    }
+
+    .linea2 {
+        font-size: 3.2rem;
+    }
+
+    .btn-comprar,
+    .btn-cotizar {
+        font-size: 1rem;
+        padding: 12px 24px;
+    }
+
+    .btn-group {
+        gap: 1rem;
+    }
+
+    .logo-footer {
+        width: 150px;
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .modal-card {
+        padding: 1.5rem;
+        max-width: 95%;
+        border-radius: 20px;
+    }
+
+    .modal-title {
+        font-size: 1.5rem;
+    }
+
+    .modal-subtitle {
+        font-size: 0.8rem;
+    }
+
+    .footer-content p {
+        font-size: 1.2rem;
+    }
+
+    .toast-notification {
+        top: 20px;
+        right: 20px;
+        left: 20px;
+        max-width: none;
+        padding: 14px 20px;
+        font-size: 0.9rem;
+    }
+}
+
+/* =============================================
+   RESPONSIVE - MÓVILES PEQUEÑOS (max-width: 480px)
+   ============================================= */
+@media (max-width: 480px) {
+    .hero-content {
+        gap: 1.2rem;
+        padding: 0 1rem;
+    }
+
+    .linea1 {
+        font-size: 1.5rem;
+        letter-spacing: 1px;
+    }
+
+    .linea2 {
+        font-size: 2.5rem;
+    }
+
+    .btn-comprar,
+    .btn-cotizar {
+        font-size: 0.85rem;
+        padding: 10px 18px;
+        letter-spacing: 1px;
+    }
+
+    .btn-group {
+        gap: 0.8rem;
+    }
+
+    .logo-footer {
+        width: 120px;
+        bottom: 15px;
+        right: 15px;
+    }
+
+    .modal-card {
+        padding: 1.2rem;
+        border-radius: 16px;
+        max-width: 98%;
+    }
+
+    .modal-title {
+        font-size: 1.3rem;
+    }
+
+    .modal-subtitle {
+        font-size: 0.75rem;
+        margin-bottom: 1.2rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 0.9rem;
+        padding: 10px 14px;
+    }
+
+    .btn-enviar {
+        font-size: 0.9rem;
+        padding: 14px 24px;
+    }
+
+    .modal-close {
+        font-size: 1.8rem;
+        top: 0.6rem;
+        right: 0.8rem;
+    }
+
+    .footer-content p {
+        font-size: 1rem;
+        letter-spacing: 2px;
+    }
+
+    .footer-content {
+        padding: 20px 15px 10px;
+    }
+
+    .toast-notification {
+        top: 15px;
+        right: 15px;
+        left: 15px;
+        padding: 12px 16px;
+        font-size: 0.85rem;
+        gap: 10px;
+    }
+
+    .toast-icon {
+        font-size: 1.2rem;
+        width: 30px;
+        height: 30px;
+    }
+}
+
+/* =============================================
+   RESPONSIVE - LANDSCAPE MÓVILES (max-height: 500px)
+   ============================================= */
+@media (max-height: 500px) {
+    .hero {
+        min-height: 100vh;
+        height: auto;
+    }
+
+    .hero-content {
+        gap: 1rem;
+        padding: 2rem 1rem;
+    }
+
+    .linea1 {
+        font-size: 1.2rem;
+    }
+
+    .linea2 {
+        font-size: 2rem;
+    }
+
+    .btn-comprar,
+    .btn-cotizar {
+        font-size: 0.8rem;
+        padding: 8px 16px;
+    }
+
+    .logo-footer {
+        width: 100px;
+        bottom: 10px;
+        right: 10px;
+    }
+
+    h1 {
+        animation: fadeInUp 0.6s ease-out 0.1s forwards;
+    }
+
+    .btn-group {
+        animation: fadeInUp 0.6s ease-out 0.3s forwards;
+    }
+}
+
+/* =============================================
+   RESPONSIVE - PANTALLAS GRANDES (min-width: 1400px)
+   ============================================= */
+@media (min-width: 1400px) {
+    .linea1 {
+        font-size: 4.5rem;
+    }
+
+    .linea2 {
+        font-size: 8rem;
+    }
+
+    .btn-comprar,
+    .btn-cotizar {
+        font-size: 1.8rem;
+        padding: 22px 55px;
+    }
+
+    .logo-footer {
+        width: 320px;
+        bottom: 40px;
+        right: 40px;
+    }
+
+    .modal-card {
+        padding: 3rem;
+        max-width: 540px;
+    }
+
+    .modal-title {
+        font-size: 2.5rem;
+    }
+}
+

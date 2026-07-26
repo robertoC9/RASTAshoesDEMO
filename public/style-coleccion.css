@@ -1,0 +1,450 @@
+/* =============================================
+   VARIABLES GLOBALES - Paleta RASTA
+   ============================================= */
+:root {
+    --rasta-red: #D92525;
+    --rasta-yellow: #F2C12E;
+    --rasta-green: #009B3A;
+    --dark-bg: #1c1c1c;
+    --white: #ffffff;
+    --glass-bg: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.3);
+    --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.5);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =============================================
+   RESET & BASE
+   ============================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    font-family: 'Bauhaus 93', 'Impact', sans-serif;
+}
+
+/* =============================================
+   ANIMACIONES GLOBALES
+   ============================================= */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulseGlow {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 25px rgba(255, 255, 255, 0.6), 0 0 50px rgba(255, 255, 255, 0.2);
+    }
+}
+
+/* =============================================
+   FONDO SCROLLABLE - Imagen de zapatilla
+   ============================================= */
+.imagen-scroll-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    z-index: 0;
+}
+
+.imagen-fondo {
+    display: block;
+    width: 100%;
+    height: 187.5vh;
+    object-fit: cover;
+    object-position: center bottom;
+    transition: filter 1s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: filter;
+}
+
+/* =============================================
+   OVERLAY UI - Glassmorphism
+   ============================================= */
+.ui-coleccion {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2rem 4rem;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.6) 0%,
+        rgba(0, 0, 0, 0.15) 40%,
+        rgba(0, 0, 0, 0) 50%,
+        rgba(0, 0, 0, 0.4) 80%,
+        rgba(0, 0, 0, 0.85) 100%
+    );
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Permitir clicks solo en elementos interactivos del UI */
+.ui-coleccion header,
+.ui-coleccion .selector-modelo {
+    pointer-events: auto;
+}
+
+/* =============================================
+   HEADER - Navegación
+   ============================================= */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.btn-volver {
+    color: var(--white);
+    text-decoration: none;
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 1rem;
+    padding: 10px 20px;
+    border: 2px solid var(--white);
+    border-radius: 30px;
+    transition: var(--transition-smooth);
+    background: transparent;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.btn-volver:hover {
+    background: var(--white);
+    color: var(--dark-bg);
+    transform: scale(0.93) translateY(2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.logo-rasta {
+    color: var(--white);
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* =============================================
+   SELECTOR DE MODELO
+   ============================================= */
+.selector-modelo {
+    text-align: center;
+    padding-bottom: 3rem;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+}
+
+.subtitulo {
+    color: var(--rasta-yellow);
+    font-family: 'Arial', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+#nombre-modelo {
+    color: var(--white);
+    font-size: 5rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow:
+        4px 4px 0px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(255, 255, 255, 0.1);
+    margin-bottom: 30px;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* =============================================
+   BOTONES DE COLOR
+   ============================================= */
+.opciones-color {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.color-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    transition: var(--transition-smooth);
+    position: relative;
+}
+
+/* Efecto de anillo expansivo en hover */
+.color-btn::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    transition: var(--transition-smooth);
+}
+
+.color-btn:hover::after {
+    border-color: var(--white);
+    inset: -8px;
+}
+
+.color-btn:hover {
+    transform: scale(1.35) translateY(-6px);
+    border-color: var(--white);
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.6),
+        0 0 20px rgba(255, 255, 255, 0.15);
+}
+
+/* Botón activo con glow pulsante */
+.color-btn.activo {
+    transform: scale(1.35) translateY(-6px);
+    border-color: var(--white);
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.6),
+        0 0 20px rgba(255, 255, 255, 0.15);
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* Efecto de click */
+.color-btn:active {
+    transform: scale(1.1) translateY(-3px);
+}
+
+/* =============================================
+   RESPONSIVE - TABLETS (max-width: 1024px)
+   ============================================= */
+@media (max-width: 1024px) {
+    .ui-coleccion {
+        padding: 2rem 2.5rem;
+    }
+
+    #nombre-modelo {
+        font-size: 4rem;
+    }
+
+    .logo-rasta {
+        font-size: 2.2rem;
+    }
+
+    .color-btn {
+        width: 46px;
+        height: 46px;
+    }
+}
+
+/* =============================================
+   RESPONSIVE - MÓVILES GRANDES (max-width: 768px)
+   ============================================= */
+@media (max-width: 768px) {
+    .ui-coleccion {
+        padding: 1rem 1.2rem;
+    }
+
+    #nombre-modelo {
+        font-size: 2.2rem;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+    }
+
+    .logo-rasta {
+        font-size: 1.5rem;
+    }
+
+    .btn-volver {
+        font-size: 0.85rem;
+        padding: 8px 16px;
+    }
+
+    .subtitulo {
+        font-size: 0.8rem;
+        letter-spacing: 4px;
+    }
+
+    .color-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .opciones-color {
+        gap: 10px;
+    }
+}
+
+/* =============================================
+   RESPONSIVE - MÓVILES PEQUEÑOS (max-width: 480px)
+   ============================================= */
+@media (max-width: 480px) {
+    .ui-coleccion {
+        padding: 0.8rem 1rem;
+    }
+
+    #nombre-modelo {
+        font-size: 1.6rem;
+        letter-spacing: 1px;
+        margin-bottom: 16px;
+    }
+
+    .logo-rasta {
+        font-size: 1.2rem;
+    }
+
+    .btn-volver {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+        border-width: 1.5px;
+    }
+
+    .subtitulo {
+        font-size: 0.7rem;
+        letter-spacing: 3px;
+        margin-bottom: 6px;
+    }
+
+    .selector-modelo {
+        padding-bottom: 1.5rem;
+    }
+
+    .color-btn {
+        width: 32px;
+        height: 32px;
+        border-width: 2px;
+    }
+
+    .opciones-color {
+        gap: 8px;
+    }
+
+    .color-btn:hover {
+        transform: scale(1.25) translateY(-4px);
+    }
+
+    .color-btn.activo {
+        transform: scale(1.25) translateY(-4px);
+    }
+}
+
+/* =============================================
+   RESPONSIVE - LANDSCAPE MÓVILES (max-height: 500px)
+   ============================================= */
+@media (max-height: 500px) {
+    .ui-coleccion {
+        padding: 0.8rem 1.5rem;
+        background: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.7) 0%,
+            rgba(0, 0, 0, 0.2) 40%,
+            rgba(0, 0, 0, 0) 50%,
+            rgba(0, 0, 0, 0.5) 80%,
+            rgba(0, 0, 0, 0.85) 100%
+        );
+    }
+
+    #nombre-modelo {
+        font-size: 1.4rem;
+        margin-bottom: 12px;
+    }
+
+    .subtitulo {
+        font-size: 0.7rem;
+        letter-spacing: 3px;
+        margin-bottom: 5px;
+    }
+
+    .selector-modelo {
+        padding-bottom: 1rem;
+    }
+
+    .logo-rasta {
+        font-size: 1.2rem;
+    }
+
+    .btn-volver {
+        font-size: 0.75rem;
+        padding: 6px 14px;
+    }
+
+    .color-btn {
+        width: 28px;
+        height: 28px;
+        border-width: 2px;
+    }
+
+    .opciones-color {
+        gap: 8px;
+    }
+
+    .color-btn:hover {
+        transform: scale(1.2) translateY(-3px);
+    }
+
+    .color-btn.activo {
+        transform: scale(1.2) translateY(-3px);
+    }
+}
+
+/* =============================================
+   RESPONSIVE - PANTALLAS GRANDES (min-width: 1400px)
+   ============================================= */
+@media (min-width: 1400px) {
+    .ui-coleccion {
+        padding: 3rem 6rem;
+    }
+
+    #nombre-modelo {
+        font-size: 6rem;
+        letter-spacing: 4px;
+        margin-bottom: 40px;
+    }
+
+    .logo-rasta {
+        font-size: 3rem;
+    }
+
+    .btn-volver {
+        font-size: 1.2rem;
+        padding: 14px 28px;
+    }
+
+    .subtitulo {
+        font-size: 1.1rem;
+        letter-spacing: 8px;
+    }
+
+    .color-btn {
+        width: 60px;
+        height: 60px;
+    }
+
+    .opciones-color {
+        gap: 24px;
+    }
+}
+
+
+

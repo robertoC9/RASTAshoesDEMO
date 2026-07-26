@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zapatillas RASTA - Nueva Colección</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="hero">
+        <div class="hero-content">
+            <h1 id="texto-rasta">
+                <span class="linea1">No RastaMan</span>
+                <span class="linea2">without <span class="marca">RASTA</span></span>
+            </h1>
+            <div class="btn-group">
+                <!-- Botón a la colección -->
+                <a href="coleccion.html" class="btn-comprar" id="btn-descubrir">Descubre la Colección</a>
+                <!-- Botón de cotización que abre la tarjeta modal -->
+                <button class="btn-cotizar" id="btn-cotizar">Cotización</button>
+            </div>
+        </div>
+        <!-- Logo en el costado inferior derecho -->
+        <img src="logo.svg" alt="Good to Go" class="logo-footer">
+    </main>
+
+    <!-- ===== TARJETA MODAL DE COTIZACIÓN ===== -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal-card" id="modal-card">
+            <!-- Botón cerrar -->
+            <button class="modal-close" id="modal-close">&times;</button>
+            
+            <h2 class="modal-title">Solicitud de Cotización</h2>
+            <p class="modal-subtitle">Completa tus datos y te enviaremos una cotización personalizada</p>
+            
+            <form class="modal-form" id="modal-form">
+                <div class="form-group">
+                    <label for="form-nombre">Nombre completo</label>
+                    <input type="text" id="form-nombre" placeholder="Tu nombre" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="form-correo">Correo electrónico</label>
+                    <input type="email" id="form-correo" placeholder="tu@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="form-modelo">Modelo de interés</label>
+                    <select id="form-modelo" required>
+                        <option value="">Selecciona un modelo</option>
+                        <option value="Zapatilla Rasta Verde">Zapatilla Rasta Verde</option>
+                        <option value="Zapatilla Rasta Roja">Zapatilla Rasta Roja</option>
+                        <option value="Zapatilla Rasta Negra">Zapatilla Rasta Negra</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="form-mensaje">Mensaje (opcional)</label>
+                    <textarea id="form-mensaje" rows="3" placeholder="Mensaje opcional"></textarea>
+                </div>
+                
+                <button type="submit" class="btn-enviar">Enviar Solicitud</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===== TOAST DE NOTIFICACIÓN ===== -->
+    <div class="toast-notification" id="toast-notification">
+        <span class="toast-icon">✅</span>
+        <span class="toast-message"></span>
+    </div>
+
+    <footer class="footer-rasta">
+        <div class="footer-bg-image"></div>
+        <div class="rasta-stripe">
+            <span class="stripe-green"></span>
+            <span class="stripe-yellow"></span>
+            <span class="stripe-red"></span>
+        </div>
+        <div class="footer-content">
+            <p>&copy; 2025 Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
