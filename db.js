@@ -7,9 +7,10 @@
  *  - Usa DATABASE_URL con SSL
  *  - Fallback local para desarrollo
  * =============================================
+ *
+ * NOTA: dotenv se carga desde server.js (entry point).
+ * No es necesario require('dotenv') aquí.
  */
-
-require('dotenv').config();
 
 const { Pool } = require('pg');
 

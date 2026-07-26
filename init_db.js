@@ -21,7 +21,7 @@ async function initDatabase() {
     // Ejecutar el SQL
     await db.query(sql);
 
-    console.log('✅ Tabla "cotizaciones" creada/verificada exitosamente.');
+    console.log('✅ Tabla "cotizaciones_rasta" creada/verificada exitosamente.');
   } catch (error) {
     console.error('❌ Error al inicializar la base de datos:', error.message);
   } finally {

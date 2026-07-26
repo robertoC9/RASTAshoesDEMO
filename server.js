@@ -97,12 +97,19 @@ app.use((err, req, res, next) => {
 // INICIAR SERVIDOR
 // =============================================
 app.listen(PORT, () => {
+  const portStr = String(PORT);
+  const padding = ' '.repeat(Math.max(0, 32 - portStr.length));
+  const urlStr = `http://localhost:${PORT}`;
+  const urlPadding = ' '.repeat(Math.max(0, 30 - urlStr.length));
+  const modeStr = process.env.NODE_ENV || 'development';
+  const modePadding = ' '.repeat(Math.max(0, 30 - modeStr.length));
+
   console.log(`
 ╔═══════════════════════════════════════════╗
 ║    🦁 ZAPATILLAS RASTA - API Server      ║
-║    Puerto: ${PORT}                            ║
-║    http://localhost:${PORT}                  ║
-║    Modo: ${process.env.NODE_ENV || 'development'}                        ║
+║    Puerto: ${PORT}${padding}║
+║    ${urlStr}${urlPadding}║
+║    Modo: ${modeStr}${modePadding}║
 ╚═══════════════════════════════════════════╝
   `);
 });

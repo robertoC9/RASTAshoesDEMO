@@ -1,0 +1,51 @@
+# =============================================
+# render.yaml - Render Blueprint (Infrastructure as Code)
+# Zapatillas RASTA
+# =============================================
+# Documentación oficial:
+# https://render.com/docs/blueprint-spec
+# =============================================
+
+# =============================================
+# WEB SERVICE - Servidor Express (Node.js)
+# =============================================
+services:
+  - type: web
+    name: zapatillas-rasta
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /api/health
+
+    # =============================================
+    # VARIABLES DE ENTORNO
+    # =============================================
+    envVars:
+      - key: NODE_ENV
+        value: production
+
+      - key: PORT
+        value: 10000
+
+      # DATABASE_URL se inyecta automáticamente desde
+      # la base de datos PostgreSQL definida abajo
+      - key: DATABASE_URL
+        fromDatabase:
+          name: zapatillas-rasta-db
+          property: connectionString
+
+      # CORS: permite el propio dominio de Render + localhost
+      - key: CORS_ORIGINS
+        value: https://zapatillas-rasta.onrender.com,http://localhost:3000
+
+# =============================================
+# BASE DE DATOS POSTGRESQL
+# =============================================
+databases:
+  - name: zapatillas-rasta-db
+    plan: free
+    region: oregon
+    ipAllowList: []
+
