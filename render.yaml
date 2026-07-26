@@ -38,7 +38,7 @@ services:
 
       # CORS: permite el propio dominio de Render + localhost
       - key: CORS_ORIGINS
-        value: https://zapatillas-rasta.onrender.com,http://localhost:3000
+        value: https://rastashoesdemo.onrender.com,http://localhost:3000
 
 # =============================================
 # BASE DE DATOS POSTGRESQL
@@ -48,4 +48,3 @@ databases:
     plan: free
     region: oregon
     ipAllowList: []
-

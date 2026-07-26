@@ -16,7 +16,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const cotizacionRoutes = require('./routes/cotizacionRoutes');
-const { testConnection, pool } = require('./db');
+const { testConnection, pool, query } = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,7 +30,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 const localOrigin = 'http://localhost:3000';
 const renderOrigin = process.env.RENDER_EXTERNAL_URL
   ? new URL(process.env.RENDER_EXTERNAL_URL).origin
-  : 'https://zapatillas-rasta.onrender.com';
+  : 'https://rastashoesdemo.onrender.com';
 
 const envOrigins = process.env.CORS_ORIGINS
   ? process.env.CORS_ORIGINS.split(',').map((origin) => origin.trim()).filter(Boolean)
@@ -159,6 +159,25 @@ async function startServer() {
     console.error('   📌 Si estás en Render, la URL se inyecta automáticamente al vincular PostgreSQL.');
     console.error('   📌 Si estás en local, crea un archivo .env con DATABASE_URL.');
     console.error('   📌 URL actual:', process.env.DATABASE_URL ? '✅ Definida' : '❌ NO DEFINIDA');
+  } else {
+    // =============================================
+    // AUTO-CREACIÓN DE TABLA (solo si hay conexión DB)
+    // =============================================
+    try {
+      await query(`
+        CREATE TABLE IF NOT EXISTS cotizaciones_rasta (
+          id SERIAL PRIMARY KEY,
+          nombre VARCHAR(120),
+          correo VARCHAR(120),
+          modelo VARCHAR(80),
+          mensaje TEXT,
+          fecha TIMESTAMP DEFAULT NOW()
+        )
+      `);
+      console.log('📦 Tabla "cotizaciones_rasta" verificada/creada exitosamente.');
+    } catch (tableError) {
+      console.error('❌ Error al crear/verificar la tabla cotizaciones_rasta:', tableError.message);
+    }
   }
 
   app.listen(PORT, () => {
@@ -183,4 +202,3 @@ async function startServer() {
 }
 
 startServer();
-
